@@ -65,12 +65,12 @@ int	valid_args(int arg_num, char **args)
 
 	i = 1;
 	if (arg_num != 5 && arg_num != 6)
-		return (1);
+		return (0);
 	while (i < arg_num)
 	{
 		if (!ft_islong(args[i]))
-			return (1);
+			return (0);
 		i++;
 	}
-	return (0);
+	return (1);
 }

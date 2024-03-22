@@ -1,57 +1,18 @@
 #include "philo.h"
 
 
-t_fork	*create_forks(int	num)
+void	*thrd_run(void *philo)
 {
-	t_fork	*forks;
-	int		i;
+	t_philo	*ph;
 
-	i = 0;
-	forks = malloc(num * sizeof(t_fork));
-	if (!forks)
-		return (forks);
-	while (i < forks)
-	{
-		forks[i].fork_id = i;
-		pthread_mutex_init(&forks[i].mutex, NULL);
-		i++;
-	}
-	return(forks);
-}
-
-t_philo	*create_philos(int	num)
-{
-	num = num + 1;
-	return(NULL);
-}
-
-t_data	*init_data(char **args)
-{
-	t_data			*data;
-
-	data = malloc(sizeof(t_data));
-	data->ph_number = (int)ft_tolong(args[1]);
-	data->tt_die = ft_tolong(args[2]);
-	data->tt_eat = ft_tolong(args[3]);
-	data->tt_sleep = ft_tolong(args[4]);
-	data->num_each_philo_must_eat = 0;
-	if (args[5])
-		data->num_each_philo_must_eat = (int)ft_tolong(args[5]);
-	data->time_start = ft_timestart();
-	data->end_simulation = 0;
-	data->forks = create_forks(data->ph_number);
-	if (!data->forks)
-	{
-		free(data);
-		return (NULL);
-	}
-	data->philos = create_philos(data->ph_number);
-	if (!data->philos)
-	{
-		free(data);
-		return (NULL);
-	}
-	return (data);
+	ph = (t_philo *) philo;
+	printf("Philo ID: %d\n", ph->id);
+	printf("Left Fork ID: %d\n", ph->data->forks[ph->id].fork_id);
+	if (ph->id == ph->data->ph_number - 1)
+		printf("Right Fork ID: %d\n", ph->data->forks[0].fork_id);
+	else
+		printf("Right Fork ID: %d\n", ph->data->forks[(ph->id) + 1].fork_id);
+	return (NULL);
 }
 
 
@@ -59,18 +20,29 @@ int main(int argc, char **argv)
 {
 	t_data	*data;
 
-	if (valid_args(argc, argv) == 0) {
-		printf("Todos los argumentos son enteros positivos.\n");
-	} else {
-		printf("Error: Argument not valid.\n");
+	if (!valid_args(argc, argv))
+	{
+		printf("Error: Arguments not valid.\n");
 		return (1);
 	}
 	data = init_data(argv);
-	print_data(data);
-	free(data);
+	if (!data)
+		return (1);
+	if (!start_mutexes(data))
+	{
+		free_data(data);
+		return (1);
+	}
+	if (!start_philos(data))
+	{
+		free_data(data);
+		return(1);
+	}
+	usleep(1);
+	destroy_mutexes(data);
+	free_data(data);
 	return (0);
 }
-
 
 /*
 void* thread_run(void *arg)
