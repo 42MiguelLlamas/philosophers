@@ -53,7 +53,7 @@ t_data	*init_basic_data(char **args, t_data *data)
 	data->num_each_philo_must_eat = 0;
 	if (args[5])
 		data->num_each_philo_must_eat = (int)ft_tolong(args[5]);
-	data->time_start = ft_timestart();
+	data->time_start = ft_time();
 	data->end_simulation = 0;
 	return(data);
 }

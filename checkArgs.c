@@ -50,7 +50,7 @@ int ft_islong(char *str)
     return (1);
 }
 
-unsigned long	ft_timestart(void)
+unsigned long	ft_time(void)
 {
 	struct timeval tv;
 

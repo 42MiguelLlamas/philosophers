@@ -3,7 +3,8 @@
 
 void	*thrd_run(void *philo)
 {
-	t_philo	*ph;
+	t_philo				*ph;
+
 
 	ph = (t_philo *) philo;
 	printf("Philo ID: %d\n", ph->id);
@@ -12,6 +13,23 @@ void	*thrd_run(void *philo)
 		printf("Right Fork ID: %d\n", ph->data->forks[0].fork_id);
 	else
 		printf("Right Fork ID: %d\n", ph->data->forks[(ph->id) + 1].fork_id);
+	ph->time_lastmeal = ph->data->time_start;
+	while (ph->dead == 0 && ph->full == 0)
+	{
+		ph->time_lastmeal = ft_time() - ph->time_lastmeal;
+		if (ph->time_lastmeal >= ph->data->tt_die)
+		{
+			printf("%ld %d died.\n", ft_time() - ph->data->time_start, ph->id);
+			ph->dead = 1;
+		}
+		if (!ph->sleep && !ph->eat && !ph->dead && !ph->full)
+		{
+			pthread_mutex_lock(&ph->data->forks[ph->id].mutex)
+			printf("%ld %d has taken a fork.\n", ft_time() - ph->data->time_start, ph->id);
+
+		}
+
+	}
 	return (NULL);
 }
 

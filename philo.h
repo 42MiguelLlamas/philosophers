@@ -44,7 +44,7 @@ typedef struct	s_philo
 int				ft_isdigit(int c);
 int				ft_islong(char *str);
 int 			ft_tolong(char *str);
-unsigned long	ft_timestart(void);
+unsigned long	ft_time(void);
 int				valid_args(int arg_num, char **args);
 
 t_fork			*create_forks(int	num);
