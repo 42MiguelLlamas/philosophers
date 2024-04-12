@@ -5,6 +5,16 @@
 #include <sys/time.h>
 #include <limits.h>
 
+typedef enum e_status
+{
+	EAT,
+	SLEEP,
+	THINK,
+	TAKE_FIRST_FORK,
+	TAKE_SECOND_FORK,
+	DIED
+}			t_status;
+
 typedef	struct	s_fork
 {
 	pthread_mutex_t	mutex;
@@ -22,10 +32,13 @@ typedef	struct	s_data
 	long int		num_each_philo_must_eat;
 	long int		time_start;
 	long int		all_threads;
+	long int		num_threads_running;
 	pthread_mutex_t	mutex;
+	pthread_mutex_t	print_mutex;
+	pthread_t		watchdog;
 	t_fork			*forks;
 	t_philo			*phs;
-	long int				end_simulation;
+	long int		end_simulation;
 }				t_data;
 
 typedef struct	s_philo
@@ -61,13 +74,14 @@ int				start_philos(t_data *data);
 void			*thrd_run(void *philo);
 int				start_dinner(t_data *data);
 
-void			wait_threads(t_data *data);
+int				wait_threads(t_data *data);
 unsigned long	ft_time(void);
 void			print_data(t_data *data);
 void 			print_philo(t_philo *philo);
 int				free_data(t_data *data);
 
-void			set_value(pthread_mutex_t *mutex, long *old, long new);
-long int		get_value(pthread_mutex_t *mutex, long *value);
-void			set_state(pthread_mutex_t *mutex, long *old, long new);
-long int		get_state(pthread_mutex_t *mutex, long *state);
+int				set_value(pthread_mutex_t *mutex, long int *old, long new);
+long int		get_value(pthread_mutex_t *mutex, long int *value);
+int				set_state(pthread_mutex_t *mutex, long int *old, long new);
+long int		get_state(pthread_mutex_t *mutex, long int *state);
+long int		increase_value(pthread_mutex_t *mutex, long *old);

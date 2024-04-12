@@ -3,7 +3,7 @@ SRCS = main.c 				\
 		checkArgs.c 		\
 		aux.c 				\
 		initData.c 			\
-		mutex_and_threads.c \
+		dinner.c \
 		getters_setters.c
 OBJS = $(SRCS:.c=.o)
 CFLAGS = -Wall -Werror -Wextra -fsanitize=address

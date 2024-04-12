@@ -13,7 +13,8 @@ t_fork	*create_forks(int	num)
 	while (i < num)
 	{
 		forks[i].fork_id = i;
-		pthread_mutex_init(&forks[i].mutex, NULL);
+		if (pthread_mutex_init(&forks[i].mutex, NULL))
+			return (NULL);
 		i++;
 	}
 	return(forks);
@@ -72,11 +73,15 @@ t_data	*init_basic_data(char **args, t_data *data)
 	data->tt_eat = ft_tolong(args[3]);
 	data->tt_sleep = ft_tolong(args[4]);
 	data->num_each_philo_must_eat = 0;
+	data->num_threads_running = 0;
+	data->time_start = 0;
 	if (args[5])
 		data->num_each_philo_must_eat = (int)ft_tolong(args[5]);
-	data->time_start = ft_time();
 	data->end_simulation = 0;
-	pthread_mutex_init(&data->mutex, NULL);
+	if (pthread_mutex_init(&data->mutex, NULL))
+		return (NULL);
+	if (pthread_mutex_init(&data->mutex, NULL))
+		return (NULL);
 	data->all_threads = 0;
 	return(data);
 }
@@ -89,6 +94,11 @@ t_data	*init_data(char **args)
 	if (!data)
 		return (NULL);
 	data = init_basic_data(args, data);
+	if (!data)
+	{
+		free(data);
+		return (NULL);
+	}
 	data->forks = create_forks(data->ph_number);
 	if (!data->forks)
 	{
