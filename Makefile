@@ -1,5 +1,10 @@
 NAME = philo
-SRCS = main.c checkArgs.c aux.c initData.c mutex_and_threads.c
+SRCS = main.c 				\
+		checkArgs.c 		\
+		aux.c 				\
+		initData.c 			\
+		mutex_and_threads.c \
+		getters_setters.c
 OBJS = $(SRCS:.c=.o)
 CFLAGS = -Wall -Werror -Wextra -fsanitize=address
 

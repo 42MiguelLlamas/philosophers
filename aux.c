@@ -1,5 +1,10 @@
 #include "philo.h"
 
+void	wait_threads(t_data *data)
+{
+	while(!get_state(&data->mutex, &data->all_threads))
+	;
+}
 void print_philo(t_philo *philo)
 {
 	if (philo == NULL) {
@@ -7,11 +12,12 @@ void print_philo(t_philo *philo)
 		return;
 	}
 
-	printf("Philo ID: %d\n", philo->id);
+	printf("Philo ID: %ld\n", philo->id);
 	printf("\tLast Meal Time: %ld\n", philo->time_lastmeal);
-	printf("\tNumber of Meals: %d\n", philo->number_of_meals);
-	printf("\tIs Full: %d\n", philo->full);
-	printf("\tState (Eat: %d, Sleep: %d, Think: %d)\n", philo->eat, philo->sleep, philo->think);
+	printf("\tNumber of Meals: %ld\n", philo->number_of_meals);
+	printf("\tIs Full: %ld\n", philo->full);
+	printf("\tRight Fork: %ld, Left Fork: %ld\n", philo->first_fork->fork_id, philo->second_fork->fork_id);
+	printf("\tState (Eat: %ld, Sleep: %ld, Think: %ld)\n", philo->eat, philo->sleep, philo->think);
 	// Nota: No imprimimos 't_data *data' para evitar recursión profunda y complejidad.
 }
 
@@ -21,18 +27,18 @@ void print_data(t_data *data) {
 		return;
 	}
 
-	printf("Philosopher Number: %d\n", data->ph_number);
+	printf("Philosopher Number: %ld\n", data->ph_number);
 	printf("Time to Die: %ld\n", data->tt_die);
 	printf("Time to Eat: %ld\n", data->tt_eat);
 	printf("Time to Sleep: %ld\n", data->tt_sleep);
-	printf("Number Each Philosopher Must Eat: %d\n", data->num_each_philo_must_eat);
+	printf("Number Each Philosopher Must Eat: %ld\n", data->num_each_philo_must_eat);
 	printf("Time Start: %ld\n", data->time_start);
-	printf("End Simulation: %d\n", data->end_simulation);
+	printf("End Simulation: %ld\n", data->end_simulation);
 
 	// Imprimir información sobre los forks si es posible
 	if (data->forks != NULL) {
 		for (int i = 0; i < data->ph_number; i++) {
-			printf("Fork ID: %d\n", data->forks[i].fork_id);
+			printf("Fork ID: %ld\n", data->forks[i].fork_id);
 			// La información del mutex se omite porque no es trivialmente imprimible
 		}
 	}
@@ -45,7 +51,15 @@ void print_data(t_data *data) {
 	}
 }
 
-void free_data(t_data *data)
+unsigned long	ft_time(void)
+{
+	struct timeval tv;
+
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000 + tv.tv_usec/1000);
+}
+
+int free_data(t_data *data)
 {
 	if (data != NULL)
 	{
@@ -61,4 +75,5 @@ void free_data(t_data *data)
 		}
 		free(data);
 	}
+	return (1);
 }

@@ -19,6 +19,25 @@ t_fork	*create_forks(int	num)
 	return(forks);
 }
 
+t_fork	*assign_fork(int order, int id, t_data *data)
+{
+	if (id % 2  == 0)
+	{
+		if (order == 1)
+		{
+			if (id == data->ph_number - 1)
+				return (&data->forks[0]);
+			return (&data->forks[id + 1]);
+		}
+		return(&data->forks[id]);
+	}
+	if (order == 1)
+		return(&data->forks[id]);
+	if (id == data->ph_number - 1)
+		return (&data->forks[0]);
+	return (&data->forks[id + 1]);
+}
+
 t_philo	*create_philos(int	num, t_data *data)
 {
 	t_philo *philos;
@@ -39,6 +58,8 @@ t_philo	*create_philos(int	num, t_data *data)
 		philos[i].think = 0;
 		philos[i].dead = 0;
 		philos[i].data = data;
+		philos[i].first_fork = assign_fork(1, i, data);
+		philos[i].second_fork = assign_fork(2, i, data);
 		i++;
 	}
 	return(philos);
@@ -55,6 +76,8 @@ t_data	*init_basic_data(char **args, t_data *data)
 		data->num_each_philo_must_eat = (int)ft_tolong(args[5]);
 	data->time_start = ft_time();
 	data->end_simulation = 0;
+	pthread_mutex_init(&data->mutex, NULL);
+	data->all_threads = 0;
 	return(data);
 }
 
