@@ -23,10 +23,13 @@ long int	increase_value(pthread_mutex_t *mutex, long int *old)
 
 long	get_value(pthread_mutex_t *mutex, long *value)
 {
-	long val;
+	long	val;
+	int		lock_result;
 
-	if (pthread_mutex_lock(mutex))
+	lock_result = pthread_mutex_lock(mutex);
+	if (lock_result)
 	{
+		printf("Error en Mutex: %d\n", lock_result);
 		print_error("Error en Mutex Lock.");
 		return (-1);
 	}

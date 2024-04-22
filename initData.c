@@ -51,14 +51,14 @@ t_philo	*create_philos(int	num, t_data *data)
 	while (++i < num)
 	{
 		philos[i].id = i;
-		philos[i].time_lastmeal = 0;
+		philos[i].lstmeal = 0;
 		philos[i].meal_counter = 0;
 		philos[i].full = 0;
 		philos[i].eat = 0;
 		philos[i].sleep = 0;
 		philos[i].think = 0;
 		philos[i].dead = 0;
-		if (pthread_mutex_init(&philos[i].ph_mutex, NULL))
+		if (pthread_mutex_init(&philos[i].ph_mut, NULL))
 			return (NULL);
 		philos[i].data = data;
 		philos[i].first_fork = assign_fork(1, i, data);

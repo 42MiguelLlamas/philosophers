@@ -38,14 +38,14 @@ int	eat(t_philo *philo)
 		return (print_error("Error en Mutex Lock."));
 	if (!write_status(TAKE_SECOND_FORK, philo))
 		return (0);
-	if (!set_value(&philo->ph_mutex, &philo->time_lastmeal, ft_time()))
+	if (!set_value(&philo->ph_mut, &philo->lstmeal, ft_time()))
 		return (0);
 	philo->meal_counter++;
 	if (!write_status(EAT, philo))
 		return (0);
 	usleep(philo->data->tt_eat * 1000);
 	if (philo->data->num_each_philo_must_eat == philo->meal_counter)
-		if (!set_value(&philo->ph_mutex, &philo->full, 1))
+		if (!set_value(&philo->ph_mut, &philo->full, 1))
 			return (0);
 	if (pthread_mutex_unlock(&philo->first_fork->mutex))
 		return (print_error("Error en Mutex Lock."));
@@ -63,7 +63,7 @@ void	*thrd_run(void *philo)
 		return (NULL);
 	if (!increase_value(&ph->data->mutex, &ph->data->num_thrd_run))
 		return (NULL);
-	if (!set_value(&ph->ph_mutex, &ph->time_lastmeal, ft_time()))
+	if (!set_value(&ph->ph_mut, &ph->lstmeal, ft_time()))
 		return (NULL);
 	while(!get_value(&ph->data->mutex, &ph->data->end_simulation))
 	{
@@ -93,8 +93,8 @@ int	start_philos(t_data *data)
 			return (print_error("Error creating thread."));
 		i++;
 	}
-	/*if (pthread_create(&data->watchdog,NULL,watchdog_run,&data))
-			return (print_error("Error creating thread."));*/
+	if (pthread_create(&data->watchdog,NULL,watchdog_run, &data))
+		return (print_error("Error creating thread."));
 	data->time_start = ft_time();
 	if (!data->time_start)
 		return(print_error("Error getting time."));
@@ -109,10 +109,13 @@ int start_dinner(t_data *data)
 	int i;
 
 	i = 0;
-	if (data->num_each_philo_must_eat == 0)
+	if (data->num_each_philo_must_eat == 0 || data->ph_number == 0)
 		return (0);
-	else if (data->ph_number == 1 || data->ph_number == 0)
-		return (0);
+	else if (data->ph_number == 1)
+	{
+		//Create one philo
+
+	}
 	if (!start_philos(data))
 		return (0);
 	while (i < data->ph_number)

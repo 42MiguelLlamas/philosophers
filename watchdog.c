@@ -2,16 +2,31 @@
 
 void	*watchdog_run(void *data)
 {
-	t_data	*wd_data;
-
-	wd_data = (t_data *)data;
-	while (get_value(&wd_data->mutex, &wd_data->num_thrd_run) ==
-		wd_data->ph_number)
-	;
-	while (get_value(&wd_data->mutex, &wd_data->end_simulation))
-	{} 
-	return (NULL);
+    t_data	*wd_d;
+	long	last_time;
+	long	i;
+	
+	wd_d= (t_data *)data;
+    while (!wait_thread_run(wd_d))
+		;
+	printf("all threads running %ld\n", wd_d->num_thrd_run);
+    while (get_value(&wd_d->mutex, &wd_d->end_simulation) == 0)
+	{
+		i = -1;
+        while (++i < wd_d->ph_number)
+		{
+			last_time = get_value(&wd_d->phs[i].ph_mut, &wd_d->phs[i].lstmeal);
+            if ((ft_time() - last_time) > wd_d->phs[i].data->tt_die)
+			{
+                if (!set_value(&wd_d->mutex, &wd_d->end_simulation, 1))
+					return (NULL);
+                break;
+            }
+        }
+    }
+    return (NULL);
 }
+
 
 void	destroy_mutexes(t_data *data)
 {

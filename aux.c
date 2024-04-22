@@ -8,6 +8,17 @@ int	wait_threads(t_data *data)
 		return (0);
 	return (1);
 }
+
+int	wait_thread_run(t_data *data)
+{
+	int	number;
+
+	number = get_value(&data->mutex, &data->num_thrd_run);
+	printf("Number %d\n", number);
+	if (number != data->ph_number)
+		return (0);
+	return (1);
+}
 void print_philo(t_philo *philo)
 {
 	if (philo == NULL) {
@@ -16,7 +27,7 @@ void print_philo(t_philo *philo)
 	}
 
 	printf("Philo ID: %ld\n", philo->id);
-	printf("\tLast Meal Time: %ld\n", philo->time_lastmeal);
+	printf("\tLast Meal Time: %ld\n", philo->lstmeal);
 	printf("\tNumber of Meals: %ld\n", philo->meal_counter);
 	printf("\tIs Full: %ld\n", philo->full);
 	printf("\tRight Fork: %ld, Left Fork: %ld\n", philo->first_fork->fork_id, philo->second_fork->fork_id);
@@ -54,7 +65,7 @@ void print_data(t_data *data) {
 	}
 }
 
-unsigned long	ft_time(void)
+long	ft_time(void)
 {
 	struct timeval tv;
 

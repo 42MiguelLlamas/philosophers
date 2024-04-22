@@ -45,14 +45,14 @@ typedef struct		s_philo
 {
 	pthread_t		thrd;
 	long int		id;
-	long int		time_lastmeal;
+	long int		lstmeal;
 	long int		meal_counter;
 	long int		full;
 	long int		eat;
 	long int		sleep;
 	long int		think;
 	long int		dead;
-	pthread_mutex_t	ph_mutex;
+	pthread_mutex_t	ph_mut;
 	t_fork			*first_fork;
 	t_fork			*second_fork;
 	t_data			*data;
@@ -76,7 +76,8 @@ void			*thrd_run(void *philo);
 int				start_dinner(t_data *data);
 
 int				wait_threads(t_data *data);
-unsigned long	ft_time(void);
+int				wait_thread_run(t_data *data);
+long			ft_time(void);
 void			print_data(t_data *data);
 void 			print_philo(t_philo *philo);
 int				free_data(t_data *data);
@@ -84,3 +85,6 @@ int				free_data(t_data *data);
 int				set_value(pthread_mutex_t *mutex, long int *old, long new);
 long int		get_value(pthread_mutex_t *mutex, long int *value);
 long int		increase_value(pthread_mutex_t *mutex, long *old);
+
+void	*watchdog_run(void *data);
+void	destroy_mutexes(t_data *data);
