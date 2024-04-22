@@ -2,9 +2,9 @@
 
 int	wait_threads(t_data *data)
 {
-	while(!get_state(&data->mutex, &data->all_threads))
+	while(!get_value(&data->mutex, &data->all_threads))
 	;
-	if (get_state(&data->mutex, &data->all_threads) == -1)
+	if (get_value(&data->mutex, &data->all_threads) == -1)
 		return (0);
 	return (1);
 }
@@ -17,11 +17,10 @@ void print_philo(t_philo *philo)
 
 	printf("Philo ID: %ld\n", philo->id);
 	printf("\tLast Meal Time: %ld\n", philo->time_lastmeal);
-	printf("\tNumber of Meals: %ld\n", philo->number_of_meals);
+	printf("\tNumber of Meals: %ld\n", philo->meal_counter);
 	printf("\tIs Full: %ld\n", philo->full);
 	printf("\tRight Fork: %ld, Left Fork: %ld\n", philo->first_fork->fork_id, philo->second_fork->fork_id);
 	printf("\tState (Eat: %ld, Sleep: %ld, Think: %ld)\n", philo->eat, philo->sleep, philo->think);
-	// Nota: No imprimimos 't_data *data' para evitar recursión profunda y complejidad.
 }
 
 void print_data(t_data *data) {

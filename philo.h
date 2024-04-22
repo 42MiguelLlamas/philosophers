@@ -32,7 +32,7 @@ typedef	struct	s_data
 	long int		num_each_philo_must_eat;
 	long int		time_start;
 	long int		all_threads;
-	long int		num_threads_running;
+	long int		num_thrd_run;
 	pthread_mutex_t	mutex;
 	pthread_mutex_t	print_mutex;
 	pthread_t		watchdog;
@@ -41,21 +41,22 @@ typedef	struct	s_data
 	long int		end_simulation;
 }				t_data;
 
-typedef struct	s_philo
+typedef struct		s_philo
 {
-	pthread_t	thrd;
-	long int	id;
-	long int	time_lastmeal;
-	long int	number_of_meals;
-	long int	full;
-	long int	eat;
-	long int	sleep;
-	long int	think;
-	long int	dead;
-	t_fork		*first_fork;
-	t_fork		*second_fork;
-	t_data		*data;
-}				t_philo;
+	pthread_t		thrd;
+	long int		id;
+	long int		time_lastmeal;
+	long int		meal_counter;
+	long int		full;
+	long int		eat;
+	long int		sleep;
+	long int		think;
+	long int		dead;
+	pthread_mutex_t	ph_mutex;
+	t_fork			*first_fork;
+	t_fork			*second_fork;
+	t_data			*data;
+}					t_philo;
 
 int				print_error(char *str);
 int				ft_isdigit(int c);
@@ -82,6 +83,4 @@ int				free_data(t_data *data);
 
 int				set_value(pthread_mutex_t *mutex, long int *old, long new);
 long int		get_value(pthread_mutex_t *mutex, long int *value);
-int				set_state(pthread_mutex_t *mutex, long int *old, long new);
-long int		get_state(pthread_mutex_t *mutex, long int *state);
 long int		increase_value(pthread_mutex_t *mutex, long *old);
