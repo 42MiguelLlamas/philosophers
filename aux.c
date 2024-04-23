@@ -12,10 +12,13 @@ int	wait_threads(t_data *data)
 int	wait_thread_run(t_data *data)
 {
 	int	number;
-
-	number = get_value(&data->mutex, &data->num_thrd_run);
-	printf("Number %d\n", number);
-	if (number != data->ph_number)
+	
+	number = 0;
+	while (number != data->ph_number && number != -1)
+	{
+		number = get_value(&data->mutex, &data->num_thrd_run);
+	}
+	if (number == -1)
 		return (0);
 	return (1);
 }

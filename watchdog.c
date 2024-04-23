@@ -7,9 +7,8 @@ void	*watchdog_run(void *data)
 	long	i;
 	
 	wd_d= (t_data *)data;
-    while (!wait_thread_run(wd_d))
-		;
-	printf("all threads running %ld\n", wd_d->num_thrd_run);
+    if (!wait_thread_run(wd_d))
+		return (NULL);
     while (get_value(&wd_d->mutex, &wd_d->end_simulation) == 0)
 	{
 		i = -1;
@@ -18,11 +17,13 @@ void	*watchdog_run(void *data)
 			last_time = get_value(&wd_d->phs[i].ph_mut, &wd_d->phs[i].lstmeal);
             if ((ft_time() - last_time) > wd_d->phs[i].data->tt_die)
 			{
+				if (!write_status(DIED, &wd_d->phs[i]))
+					return (NULL);
                 if (!set_value(&wd_d->mutex, &wd_d->end_simulation, 1))
 					return (NULL);
                 break;
             }
-        }
+		}
     }
     return (NULL);
 }

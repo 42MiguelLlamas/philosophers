@@ -71,6 +71,7 @@ t_data			*init_basic_data(char **args, t_data *data);
 t_data			*init_data(char **args);
 
 void			destroy_mutexes(t_data *data);
+int				write_status(t_status status, t_philo *philo);
 int				start_philos(t_data *data);
 void			*thrd_run(void *philo);
 int				start_dinner(t_data *data);

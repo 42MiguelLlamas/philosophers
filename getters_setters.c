@@ -29,7 +29,6 @@ long	get_value(pthread_mutex_t *mutex, long *value)
 	lock_result = pthread_mutex_lock(mutex);
 	if (lock_result)
 	{
-		printf("Error en Mutex: %d\n", lock_result);
 		print_error("Error en Mutex Lock.");
 		return (-1);
 	}

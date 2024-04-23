@@ -93,14 +93,13 @@ int	start_philos(t_data *data)
 			return (print_error("Error creating thread."));
 		i++;
 	}
-	if (pthread_create(&data->watchdog,NULL,watchdog_run, &data))
+	if (pthread_create(&data->watchdog,NULL,watchdog_run, data))
 		return (print_error("Error creating thread."));
 	data->time_start = ft_time();
 	if (!data->time_start)
 		return(print_error("Error getting time."));
 	if (!set_value(&data->mutex, &data->all_threads, 1))
 		return (0);
-	printf("All threads ready main\n");
 	return (1);
 }
 
@@ -123,5 +122,8 @@ int start_dinner(t_data *data)
 		pthread_join(data->phs[i].thrd, NULL);
 		i++;
 	}
+	if (!set_value(&data->mutex, &data->end_simulation, 1))
+		return (0);
+	pthread_join(data->watchdog, NULL);
 	return (1);
 }
