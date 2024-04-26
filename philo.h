@@ -72,6 +72,10 @@ t_data			*init_data(char **args);
 
 void			destroy_mutexes(t_data *data);
 int				write_status(t_status status, t_philo *philo);
+int				thinking(t_philo *philo, int do_it);
+int				eating(t_philo *philo);
+int				sleeping(t_philo *philo);
+int				desync(t_philo *philo);
 int				start_philos(t_data *data);
 void			*thrd_run(void *philo);
 int				start_dinner(t_data *data);
@@ -79,6 +83,7 @@ int				start_dinner(t_data *data);
 int				wait_threads(t_data *data);
 int				wait_thread_run(t_data *data);
 long			ft_time(void);
+void			precise_usleep(long time, t_philo *philo);
 void			print_data(t_data *data);
 void 			print_philo(t_philo *philo);
 int				free_data(t_data *data);

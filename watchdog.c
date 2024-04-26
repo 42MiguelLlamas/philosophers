@@ -1,9 +1,22 @@
 #include "philo.h"
 
+int	philo_dead(t_philo *philo)
+{
+	long	elapsed;
+	long	tt_die;
+
+	if (get_value(&philo->ph_mut, &philo->full) == 1)
+		return (0);
+	elapsed = ft_time() - philo->lstmeal;
+	tt_die = philo->data->tt_die;
+	if (elapsed > tt_die)
+		return (1);
+	return (0);
+}
+
 void	*watchdog_run(void *data)
 {
     t_data	*wd_d;
-	long	last_time;
 	long	i;
 	
 	wd_d= (t_data *)data;
@@ -12,14 +25,14 @@ void	*watchdog_run(void *data)
     while (get_value(&wd_d->mutex, &wd_d->end_simulation) == 0)
 	{
 		i = -1;
-        while (++i < wd_d->ph_number)
+        while (++i < wd_d->ph_number &&
+			get_value(&wd_d->mutex, &wd_d->end_simulation) == 0)
 		{
-			last_time = get_value(&wd_d->phs[i].ph_mut, &wd_d->phs[i].lstmeal);
-            if ((ft_time() - last_time) > wd_d->phs[i].data->tt_die)
+            if (philo_dead(&wd_d->phs[i]))
 			{
 				if (!write_status(DIED, &wd_d->phs[i]))
 					return (NULL);
-                if (!set_value(&wd_d->mutex, &wd_d->end_simulation, 1))
+				if (!set_value(&wd_d->mutex, &wd_d->end_simulation, 1))
 					return (NULL);
                 break;
             }

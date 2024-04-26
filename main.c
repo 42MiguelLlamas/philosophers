@@ -11,9 +11,9 @@ int main(int argc, char **argv)
 	data = init_data(argv);
 	if (!data)
 		return (1);
-	printf("--------Data Ready---------\n");
-	print_data(data);
-	printf("--------Data Ready---------\n");
+	//printf("--------Data Ready---------\n");
+	//print_data(data);
+	//printf("--------Data Ready---------\n");
 	if (!start_dinner(data))
 		return (1);
 	free_data(data);

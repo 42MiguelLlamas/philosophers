@@ -22,6 +22,47 @@ int	wait_thread_run(t_data *data)
 		return (0);
 	return (1);
 }
+
+long	ft_time(void)
+{
+	struct timeval tv;
+
+	if (gettimeofday(&tv, NULL) == -1)
+		return (0);
+	return (tv.tv_sec * 1000 + tv.tv_usec/1000);
+}
+
+long	ft_microtime(void)
+{
+	struct timeval tv;
+
+	if (gettimeofday(&tv, NULL) == -1)
+		return (0);
+	return (tv.tv_sec * 1e6 + tv.tv_usec);
+}
+
+void	precise_usleep(long time, t_philo *philo)
+{
+	long	start;
+	long	elapsed;
+	long	rem;
+
+	start = ft_microtime();
+	while(ft_microtime() - start < time)
+	{
+		if (get_value(&philo->data->mutex, &philo->data->end_simulation) != 0)
+			break;
+		elapsed = ft_microtime() - start;
+		rem = time - elapsed;
+		if (rem > 1e3)
+			usleep(rem / 2);
+		else
+		{
+			while(ft_microtime() - start < time)
+			;
+		}
+	}
+}
 void print_philo(t_philo *philo)
 {
 	if (philo == NULL) {
@@ -68,14 +109,6 @@ void print_data(t_data *data) {
 	}
 }
 
-long	ft_time(void)
-{
-	struct timeval tv;
-
-	if (gettimeofday(&tv, NULL) == -1)
-		return (0);
-	return (tv.tv_sec * 1000 + tv.tv_usec/1000);
-}
 
 int free_data(t_data *data)
 {

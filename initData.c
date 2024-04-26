@@ -77,7 +77,11 @@ t_data	*init_basic_data(char **args, t_data *data)
 	data->num_thrd_run = 0;
 	data->time_start = 0;
 	if (args[5])
+	{
+		if ((int)ft_tolong(args[5]) == 0)
+			return (NULL);
 		data->num_each_philo_must_eat = (int)ft_tolong(args[5]);
+	}
 	data->end_simulation = 0;
 	if (pthread_mutex_init(&data->mutex, NULL))
 		return (NULL);
@@ -94,8 +98,7 @@ t_data	*init_data(char **args)
 	data = malloc(sizeof(t_data));
 	if (!data)
 		return (NULL);
-	data = init_basic_data(args, data);
-	if (!data)
+	if (!init_basic_data(args, data))
 	{
 		free(data);
 		return (NULL);
