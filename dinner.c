@@ -1,98 +1,5 @@
 #include "philo.h"
 
-int	write_status(t_status status, t_philo *philo)
-{
-	long	time;
-
-	time = ft_time() - philo->data->time_start;
-	if (get_value(&philo->data->mutex, &philo->data->end_simulation) == 0)
-	{
-		if (pthread_mutex_lock(&philo->data->print_mutex))
-			return (print_error("Error en Mutex Lock."));
-		if (status == TAKE_FIRST_FORK || status == TAKE_SECOND_FORK)
-			printf("%-6ld %ld has taken a fork\n", time, philo->id);
-		else if (status == EAT)
-			printf("%-6ld %ld is eating\n", time, philo->id);
-		else if (status == SLEEP)
-			printf("%-6ld %ld is sleeping\n", time, philo->id);
-		else if (status == THINK)
-			printf("%-6ld %ld is thinking\n", time, philo->id);
-		else if (status == DIED)
-			printf("%-6ld %ld died\n", time, philo->id);
-		if (pthread_mutex_unlock(&philo->data->print_mutex))
-			return (print_error("Error en Mutex Lock."));
-		return (1);
-	}
-	else if (get_value(&philo->data->mutex, &philo->data->end_simulation) == -1)
-		return (0);
-	return (1);
-}
-
-int	eating(t_philo *philo)
-{
-	if (pthread_mutex_lock(&philo->first_fork->mutex))
-		return (print_error("Error en Mutex Lock."));
-	if (!write_status(TAKE_FIRST_FORK, philo))
-		return (0);
-	if (pthread_mutex_lock(&philo->second_fork->mutex))
-		return (print_error("Error en Mutex Lock."));
-	if (!write_status(TAKE_SECOND_FORK, philo))
-		return (0);
-	if (!set_value(&philo->ph_mut, &philo->lstmeal, ft_time()))
-		return (0);
-	philo->meal_counter++;
-	if (!write_status(EAT, philo))
-		return (0);
-	precise_usleep(philo->data->tt_eat * 1000, philo);
-	if (philo->data->num_each_philo_must_eat == philo->meal_counter)
-		if (!set_value(&philo->ph_mut, &philo->full, 1))
-			return (0);
-	if (pthread_mutex_unlock(&philo->first_fork->mutex))
-		return (print_error("Error en Mutex Lock."));
-	if (pthread_mutex_unlock(&philo->second_fork->mutex))
-		return (print_error("Error en Mutex Lock."));
-	return (1);
-}
-
-int	sleeping(t_philo *philo)
-{
-	if (!write_status(SLEEP, philo))
-		return (0);
-	precise_usleep(philo->data->tt_sleep * 1000, philo);
-	return (1);
-}
-
-int	thinking(t_philo *philo, int do_it)
-{
-	long	tt_think;
-
-	if (do_it == 1)
-		if (!write_status(THINK, philo))
-			return (0);
-	if (philo->data->ph_number % 2 != 0)
-		return (1);
-	tt_think = philo->data->tt_eat * 2 - philo->data->tt_sleep;
-	if (tt_think < 0)
-		tt_think = 0;
-	precise_usleep(tt_think * 0.42, philo);
-	return (1);
-}
-
-int	desync(t_philo *philo)
-{
-	if (philo->data->ph_number % 2 == 0)
-	{
-		if (philo->id % 2 != 0)
-			precise_usleep(3e4, philo);
-	}
-	else
-	{
-		if (philo ->id % 2 == 0)
-			if (!thinking(philo, 0))
-				return (0);
-	}
-	return (1);
-}
 
 void	*thrd_run(void *philo)
 {
@@ -121,6 +28,33 @@ void	*thrd_run(void *philo)
 			return (NULL);
 	}
 	return (NULL);
+}
+
+void	*watchdog_run(void *data)
+{
+    t_data	*wd_d;
+	long	i;
+	
+	wd_d= (t_data *)data;
+    if (!wait_thread_run(wd_d))
+		return (NULL);
+    while (get_value(&wd_d->mutex, &wd_d->end_simulation) == 0)
+	{
+		i = -1;
+        while (++i < wd_d->ph_number &&
+			get_value(&wd_d->mutex, &wd_d->end_simulation) == 0)
+		{
+            if (philo_dead(&wd_d->phs[i]))
+			{
+				if (!write_status(DIED, &wd_d->phs[i]))
+					return (NULL);
+				if (!set_value(&wd_d->mutex, &wd_d->end_simulation, 1))
+					return (NULL);
+                break;
+            }
+		}
+    }
+    return (NULL);
 }
 
 void	*lone_philo(void *philo)

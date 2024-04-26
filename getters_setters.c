@@ -40,3 +40,21 @@ long	get_value(pthread_mutex_t *mutex, long *value)
 	}
 	return (val);
 }
+
+long	ft_time(void)
+{
+	struct timeval tv;
+
+	if (gettimeofday(&tv, NULL) == -1)
+		return (0);
+	return (tv.tv_sec * 1000 + tv.tv_usec/1000);
+}
+
+long	ft_microtime(void)
+{
+	struct timeval tv;
+
+	if (gettimeofday(&tv, NULL) == -1)
+		return (0);
+	return (tv.tv_sec * 1e6 + tv.tv_usec);
+}

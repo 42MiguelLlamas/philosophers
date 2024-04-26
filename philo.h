@@ -70,27 +70,29 @@ t_philo			*create_philos(int	num, t_data *data);
 t_data			*init_basic_data(char **args, t_data *data);
 t_data			*init_data(char **args);
 
-void			destroy_mutexes(t_data *data);
 int				write_status(t_status status, t_philo *philo);
 int				thinking(t_philo *philo, int do_it);
 int				eating(t_philo *philo);
 int				sleeping(t_philo *philo);
-int				desync(t_philo *philo);
+int				philo_dead(t_philo *philo);
+
+void			*lone_philo(void *philo);
+void			*watchdog_run(void *data);
 int				start_philos(t_data *data);
 void			*thrd_run(void *philo);
 int				start_dinner(t_data *data);
 
 int				wait_threads(t_data *data);
 int				wait_thread_run(t_data *data);
-long			ft_time(void);
 void			precise_usleep(long time, t_philo *philo);
-void			print_data(t_data *data);
-void 			print_philo(t_philo *philo);
-int				free_data(t_data *data);
+int				desync(t_philo *philo);
+void			cleanup_data(t_data *data);
 
+long			ft_time(void);
+long			ft_microtime(void);
 int				set_value(pthread_mutex_t *mutex, long int *old, long new);
 long int		get_value(pthread_mutex_t *mutex, long int *value);
 long int		increase_value(pthread_mutex_t *mutex, long *old);
 
-void	*watchdog_run(void *data);
-void	destroy_mutexes(t_data *data);
+/*void			print_data(t_data *data);
+void 			print_philo(t_philo *philo);*/

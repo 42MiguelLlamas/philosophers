@@ -1,11 +1,11 @@
 NAME = philo
 SRCS = main.c 				\
 		checkArgs.c 		\
-		aux.c 				\
+		actions.c	 		\
+		timing.c			\
 		initData.c 			\
 		dinner.c 			\
-		getters_setters.c 	\
-		watchdog.c
+		getters_setters.c
 OBJS = $(SRCS:.c=.o)
 CFLAGS = -Wall -Werror -Wextra -fsanitize=address
 
