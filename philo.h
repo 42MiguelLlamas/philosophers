@@ -94,5 +94,3 @@ int				set_value(pthread_mutex_t *mutex, long int *old, long new);
 long int		get_value(pthread_mutex_t *mutex, long int *value);
 long int		increase_value(pthread_mutex_t *mutex, long *old);
 
-/*void			print_data(t_data *data);
-void 			print_philo(t_philo *philo);*/

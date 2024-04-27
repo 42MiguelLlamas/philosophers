@@ -67,14 +67,16 @@ int	thinking(t_philo *philo, int do_it)
 	long	tt_think;
 
 	if (do_it == 1)
+	{
 		if (!write_status(THINK, philo))
 			return (0);
-	if (philo->data->ph_number % 2 != 0)
+	}
+	if (philo->data->ph_number % 2 == 0)
 		return (1);
 	tt_think = philo->data->tt_eat * 2 - philo->data->tt_sleep;
 	if (tt_think < 0)
 		tt_think = 0;
-	precise_usleep(tt_think * 0.42, philo);
+	precise_usleep(tt_think * 1000, philo);
 	return (1);
 }
 
