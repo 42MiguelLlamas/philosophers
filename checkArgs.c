@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   checkArgs.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mllamas- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/27 10:17:37 by mllamas-          #+#    #+#             */
+/*   Updated: 2024/04/27 10:17:39 by mllamas-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 int	print_error(char *str)
@@ -14,48 +26,45 @@ int	ft_isdigit(int c)
 		return (0);
 }
 
-
-long int ft_tolong(char *str)
+long int	ft_tolong(char *str)
 {
-    unsigned long	result;
-    int				i;
+	unsigned long	result;
+	int				i;
 	unsigned long	digit;
-	
+
 	i = 0;
 	result = 0;
-    while (str[i] != '\0')
+	while (str[i] != '\0')
 	{
-        digit = str[i] - '0';
-        result = result * 10 + digit;
-        i++;
-    }
-    return (result);
+		digit = str[i] - '0';
+		result = result * 10 + digit;
+		i++;
+	}
+	return (result);
 }
 
-
-long int ft_islong(char *str)
+long int	ft_islong(char *str)
 {
-    unsigned long	result;
-    int				i;
+	unsigned long	result;
+	int				i;
 	unsigned long	digit;
-	
+
 	i = 0;
 	result = 0;
-    if (str[i] == '\0')
-        return (print_error("Error: Argumento Vacío"));
-    while (str[i] != '\0')
+	if (str[i] == '\0')
+		return (print_error("Error: Argumento Vacío"));
+	while (str[i] != '\0')
 	{
-        if (!ft_isdigit(str[i]))
-            return (print_error("Error: Argumento No Numerico"));
-        digit = str[i] - '0';
-        if (result > (LONG_MAX - digit) / 10)
-            return (print_error("Error: Argumento Fuera de Rango"));
-        result = result * 10 + digit;
-        i++;
-    }
-    return (1);
+		if (!ft_isdigit(str[i]))
+			return (print_error("Error: Argumento No Numerico"));
+		digit = str[i] - '0';
+		if (result > (LONG_MAX - digit) / 10)
+			return (print_error("Error: Argumento Fuera de Rango"));
+		result = result * 10 + digit;
+		i++;
+	}
+	return (1);
 }
-
 
 int	valid_args(int arg_num, char **args)
 {

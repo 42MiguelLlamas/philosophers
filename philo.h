@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mllamas- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/27 10:18:38 by mllamas-          #+#    #+#             */
+/*   Updated: 2024/04/27 10:18:41 by mllamas-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -15,15 +27,15 @@ typedef enum e_status
 	DIED
 }			t_status;
 
-typedef	struct	s_fork
+typedef struct s_fork
 {
 	pthread_mutex_t	mutex;
-	long int				fork_id;
-}				t_fork;
+	long int		fork_id;
+}					t_fork;
 
 typedef struct s_philo	t_philo;
 
-typedef	struct	s_data
+typedef struct s_data
 {
 	long int		ph_number;
 	long int		tt_die;
@@ -41,7 +53,7 @@ typedef	struct	s_data
 	long int		end_simulation;
 }				t_data;
 
-typedef struct		s_philo
+typedef struct s_philo
 {
 	pthread_t		thrd;
 	long int		id;
@@ -64,9 +76,9 @@ long int		ft_islong(char *str);
 long int		ft_tolong(char *str);
 int				valid_args(int arg_num, char **args);
 
-t_fork			*create_forks(int	num);
+t_fork			*create_forks(int num);
 t_fork			*assign_fork(int order, int id, t_data *data);
-t_philo			*create_philos(int	num, t_data *data);
+t_philo			*create_philos(int num, t_data *data);
 t_data			*init_basic_data(char **args, t_data *data);
 t_data			*init_data(char **args);
 
@@ -93,4 +105,3 @@ long			ft_microtime(void);
 int				set_value(pthread_mutex_t *mutex, long int *old, long new);
 long int		get_value(pthread_mutex_t *mutex, long int *value);
 long int		increase_value(pthread_mutex_t *mutex, long *old);
-

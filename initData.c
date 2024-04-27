@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   initData.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mllamas- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/27 10:18:12 by mllamas-          #+#    #+#             */
+/*   Updated: 2024/04/27 10:18:15 by mllamas-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-
-t_fork	*create_forks(int	num)
+t_fork	*create_forks(int num)
 {
 	t_fork	*forks;
 	int		i;
@@ -17,12 +28,12 @@ t_fork	*create_forks(int	num)
 			return (NULL);
 		i++;
 	}
-	return(forks);
+	return (forks);
 }
 
 t_fork	*assign_fork(int order, int id, t_data *data)
 {
-	if (id % 2  == 0)
+	if (id % 2 == 0)
 	{
 		if (order == 1)
 		{
@@ -30,18 +41,18 @@ t_fork	*assign_fork(int order, int id, t_data *data)
 				return (&data->forks[0]);
 			return (&data->forks[id + 1]);
 		}
-		return(&data->forks[id]);
+		return (&data->forks[id]);
 	}
 	if (order == 1)
-		return(&data->forks[id]);
+		return (&data->forks[id]);
 	if (id == data->ph_number - 1)
 		return (&data->forks[0]);
 	return (&data->forks[id + 1]);
 }
 
-t_philo	*create_philos(int	num, t_data *data)
+t_philo	*create_philos(int num, t_data *data)
 {
-	t_philo *philos;
+	t_philo	*philos;
 	int		i;
 
 	i = -1;
@@ -64,7 +75,7 @@ t_philo	*create_philos(int	num, t_data *data)
 		philos[i].first_fork = assign_fork(1, i, data);
 		philos[i].second_fork = assign_fork(2, i, data);
 	}
-	return(philos);
+	return (philos);
 }
 
 t_data	*init_basic_data(char **args, t_data *data)
@@ -88,7 +99,7 @@ t_data	*init_basic_data(char **args, t_data *data)
 	if (pthread_mutex_init(&data->print_mutex, NULL))
 		return (NULL);
 	data->all_threads = 0;
-	return(data);
+	return (data);
 }
 
 t_data	*init_data(char **args)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   getters_setters.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mllamas- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/27 10:18:02 by mllamas-          #+#    #+#             */
+/*   Updated: 2024/04/27 10:18:04 by mllamas-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 int	set_value(pthread_mutex_t *mutex, long *old, long new)
@@ -9,7 +21,6 @@ int	set_value(pthread_mutex_t *mutex, long *old, long new)
 		return (print_error("Error en Mutex Unlock."));
 	return (1);
 }
-
 
 long int	increase_value(pthread_mutex_t *mutex, long int *old)
 {
@@ -43,16 +54,16 @@ long	get_value(pthread_mutex_t *mutex, long *value)
 
 long	ft_time(void)
 {
-	struct timeval tv;
+	struct timeval	tv;
 
 	if (gettimeofday(&tv, NULL) == -1)
 		return (0);
-	return (tv.tv_sec * 1000 + tv.tv_usec/1000);
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
 long	ft_microtime(void)
 {
-	struct timeval tv;
+	struct timeval	tv;
 
 	if (gettimeofday(&tv, NULL) == -1)
 		return (0);

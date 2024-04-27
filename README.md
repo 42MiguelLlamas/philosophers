@@ -1,2 +1,0 @@
-# philosophers
-Hilos y Mutex
