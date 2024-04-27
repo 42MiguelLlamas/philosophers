@@ -25,26 +25,27 @@ int	wait_thread_run(t_data *data)
 
 void	precise_usleep(long time, t_philo *philo)
 {
-	long	start;
+    long	start;
+	long	now;
 	long	elapsed;
-	long	rem;
 
 	start = ft_microtime();
-	while(ft_microtime() - start < time)
+    while (1)
 	{
-		if (get_value(&philo->data->mutex, &philo->data->end_simulation) != 0)
-			break;
-		elapsed = ft_microtime() - start;
-		rem = time - elapsed;
-		if (rem > 1e3)
-			usleep(rem / 2);
-		else
-		{
-			while(ft_microtime() - start < time)
-			;
-		}
-	}
+         now = ft_microtime();
+         elapsed = now - start;
+        if (elapsed >= time)
+            break;
+        if (get_value(&philo->data->mutex, &philo->data->end_simulation) != 0)
+            break;
+        long rem = time - elapsed;
+        if (rem > 1000)
+            usleep(rem / 2);
+        else
+            usleep(100);
+    }
 }
+
 
 int	desync(t_philo *philo)
 {

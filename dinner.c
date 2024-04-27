@@ -53,6 +53,7 @@ void	*watchdog_run(void *data)
                 break;
             }
 		}
+		usleep(200);
     }
     return (NULL);
 }
@@ -101,14 +102,10 @@ int	start_philos(t_data *data)
 	if (pthread_create(&data->watchdog,NULL,watchdog_run, data))
 		return (print_error("Error creating thread."));
 	data->time_start = ft_time();
-	if (!data->time_start)
-		return(print_error("Error getting time."));
 	if (!set_value(&data->mutex, &data->all_threads, 1))
 		return (0);
 	return (1);
 }
-
-
 
 int start_dinner(t_data *data)
 {
